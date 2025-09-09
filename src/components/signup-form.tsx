@@ -1,4 +1,3 @@
-"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,51 +9,33 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 import { doLogin } from "@/app/actions";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Link from "next/link";
 
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [error, setError] = useState("");
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = new FormData(e.currentTarget);
-
-      const response = await doLogin(formData);
-      if (!!response.error) {
-        setError(response.error.message);
-      } else {
-        router.push("/dashboard");
-      }
-    } catch (error) {
-      setError("Check your credentials");
-    }
-  };
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Sign up to your account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your details below to sign up to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
+          <form action={doLogin}>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-3">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" type="text" placeholder="John Doe" required />
+              </div>
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
-                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -63,37 +44,24 @@ export function LoginForm({
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
                 </div>
                 <Input
                   id="password"
                   type="password"
-                  name="password"
                   placeholder="********"
                   required
                 />
-                {error && (
-                  <div>
-                    <p className="text-sm text-red-500 text-center">{error}</p>
-                  </div>
-                )}
               </div>
-
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full">
-                  Login
+                  Sign up
                 </Button>
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/signup" className="underline underline-offset-4">
-                Sign up
+              Already have an account?{" "}
+              <Link href="/login" className="underline underline-offset-4">
+                Sign in
               </Link>
             </div>
           </form>
